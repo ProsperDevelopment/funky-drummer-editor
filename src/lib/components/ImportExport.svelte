@@ -17,6 +17,7 @@
 
   let fileInput: HTMLInputElement;
   let exportFormat = $state<'full' | 'grid-only'>('full');
+  let copySuccess = $state(false);
 
   function exportPattern() {
     let data: unknown;
@@ -83,20 +84,62 @@
     input.click();
   }
 
-  function copyToClipboard() {
+  async function copyToClipboard() {
     const json = JSON.stringify(pattern, null, 2);
-    navigator.clipboard.writeText(json);
+    try {
+      await navigator.clipboard.writeText(json);
+      copySuccess = true;
+      setTimeout(() => (copySuccess = false), 1500);
+    } catch {
+      fallbackCopy(json);
+    }
   }
 
-  function pasteFromClipboard() {
-    navigator.clipboard.readText().then((text) => {
-      try {
-        const data = JSON.parse(text);
-        onload(validatePattern(data));
-      } catch {
-        alert('Clipboard does not contain valid JSON');
-      }
-    });
+  function fallbackCopy(text: string) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    copySuccess = true;
+    setTimeout(() => (copySuccess = false), 1500);
+  }
+
+  async function pasteFromClipboard() {
+    try {
+      const text = await navigator.clipboard.readText();
+      handlePasteText(text);
+    } catch {
+      fallbackPaste();
+    }
+  }
+
+  function fallbackPaste() {
+    const ta = document.createElement('textarea');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.focus();
+    document.execCommand('paste');
+    const text = ta.value;
+    document.body.removeChild(ta);
+    if (text) {
+      handlePasteText(text);
+    } else {
+      alert('Paste not supported in this browser. Use Ctrl+V instead.');
+    }
+  }
+
+  function handlePasteText(text: string) {
+    try {
+      const data = JSON.parse(text);
+      onload(validatePattern(data));
+    } catch {
+      alert('Clipboard does not contain valid JSON');
+    }
   }
 </script>
 
@@ -121,7 +164,7 @@
     </div>
     <button onclick={exportPattern}>Export Current</button>
     <button onclick={exportAllPatterns}>Export All ({patterns.length})</button>
-    <button onclick={copyToClipboard}>Copy to Clipboard</button>
+    <button onclick={copyToClipboard}>{copySuccess ? 'Copied!' : 'Copy to Clipboard'}</button>
     <button onclick={() => exportMidi(pattern)}>Export MIDI</button>
   </div>
 </div>
