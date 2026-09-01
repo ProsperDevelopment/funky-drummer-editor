@@ -342,16 +342,18 @@
     cursor: pointer;
     padding: 0;
     border-radius: 2px;
-    transition: background-color 0.1s, transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    transition: background-color 0.1s, box-shadow 0.12s ease-out;
+    box-shadow: none;
   }
 
   .cell:hover {
     border-color: var(--accent-purple);
     background: var(--bg-elevated);
+    box-shadow: none;
   }
 
   .cell:active {
-    transform: scale(0.85);
+    transform: none;
     box-shadow: 0 0 6px 1px var(--accent-pink-glow);
   }
 
