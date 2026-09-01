@@ -50,34 +50,47 @@
     const maxRow = drumConfig.length - 1;
     const maxStep = totalSteps() - 1;
 
+    let newRow = row;
+    let newStep = step;
+
     switch (e.key) {
       case 'ArrowUp':
         e.preventDefault();
-        focusedCell = { row: Math.max(0, row - 1), step };
+        newRow = Math.max(0, row - 1);
         break;
       case 'ArrowDown':
         e.preventDefault();
-        focusedCell = { row: Math.min(maxRow, row + 1), step };
+        newRow = Math.min(maxRow, row + 1);
         break;
       case 'ArrowLeft':
         e.preventDefault();
-        focusedCell = { row, step: Math.max(0, step - 1) };
+        newStep = Math.max(0, step - 1);
         break;
       case 'ArrowRight':
         e.preventDefault();
-        focusedCell = { row, step: Math.min(maxStep, step + 1) };
+        newStep = Math.min(maxStep, step + 1);
         break;
       case ' ':
       case 'Enter':
         e.preventDefault();
         toggleCell(drumConfig[row].id, step);
-        break;
+        return;
       case 'Escape':
         e.preventDefault();
         focusedCell = null;
         (e.target as HTMLElement).blur();
-        break;
+        return;
+      default:
+        return;
     }
+
+    // Blur old cell, focus new cell
+    (e.target as HTMLElement).blur();
+    focusedCell = { row: newRow, step: newStep };
+    requestAnimationFrame(() => {
+      const cell = document.querySelector(`[data-row="${newRow}"][data-step="${newStep}"]`) as HTMLElement;
+      cell?.focus();
+    });
   }
 
   function handleGridKeydownBubbling(e: KeyboardEvent) {
