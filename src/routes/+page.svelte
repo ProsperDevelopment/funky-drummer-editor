@@ -17,7 +17,8 @@
   let selectedPattern = $derived(patterns.find((p) => p.id === selectedId) ?? patterns[0]);
 
   function updatePattern(updated: DrumPattern) {
-    patterns = patterns.map((p) => (p.id === updated.id ? updated : p));
+    const idx = patterns.findIndex((p) => p.id === updated.id);
+    if (idx >= 0) patterns[idx] = updated;
   }
 
   function selectPattern(id: string) {

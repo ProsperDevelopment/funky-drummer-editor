@@ -15,29 +15,21 @@
   }
 
   function toggleCell(drumId: string, step: number) {
-    const newGrid = { ...pattern.grid };
-    const newRow = [...newGrid[drumId]];
-    if (newRow[step] > 0) {
-      newRow[step] = 0;
-    } else {
-      newRow[step] = velocity;
-    }
-    newGrid[drumId] = newRow;
-    onupdate({ ...pattern, grid: newGrid });
+    const row = pattern.grid[drumId];
+    row[step] = row[step] > 0 ? 0 : velocity;
+    onupdate(pattern);
   }
 
   function clearDrum(drumId: string) {
-    const newGrid = { ...pattern.grid };
-    newGrid[drumId] = new Array(pattern.measures * 16).fill(0);
-    onupdate({ ...pattern, grid: newGrid });
+    pattern.grid[drumId].fill(0);
+    onupdate(pattern);
   }
 
   function clearAll() {
-    const newGrid: Record<string, number[]> = {};
     for (const drum of drumConfig) {
-      newGrid[drum.id] = new Array(pattern.measures * 16).fill(0);
+      pattern.grid[drum.id].fill(0);
     }
-    onupdate({ ...pattern, grid: newGrid });
+    onupdate(pattern);
   }
 
   function getStepColor(drumId: string, step: number): string {
