@@ -124,11 +124,11 @@ function playHiHatOpen(ctx: AudioContext, velocity: number) {
   const gain = ctx.createGain();
   gain.connect(ctx.destination);
 
-  // Noise lowpass 14000Hz (0.3s, 40%)
+  // Noise lowpass 10000Hz (0.3s, 40%)
   const n1 = createNoiseSource(ctx);
   const f1 = ctx.createBiquadFilter();
   f1.type = 'lowpass';
-  f1.frequency.value = 14000;
+  f1.frequency.value = 10000;
   const g1 = ctx.createGain();
   g1.gain.setValueAtTime(velocity * 0.4, now);
   g1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
@@ -138,11 +138,11 @@ function playHiHatOpen(ctx: AudioContext, velocity: number) {
   n1.start(now);
   n1.stop(now + 0.3);
 
-  // Noise lowpass 18000Hz (0.05s, 20%)
+  // Noise lowpass 12000Hz (0.05s, 20%)
   const n2 = createNoiseSource(ctx);
   const f2 = ctx.createBiquadFilter();
   f2.type = 'lowpass';
-  f2.frequency.value = 18000;
+  f2.frequency.value = 12000;
   const g2 = ctx.createGain();
   g2.gain.setValueAtTime(velocity * 0.2, now);
   g2.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
@@ -221,11 +221,11 @@ function playCrash(ctx: AudioContext, velocity: number) {
   const gain = ctx.createGain();
   gain.connect(ctx.destination);
 
-  // Noise lowpass 14000Hz (0.6s, 50%)
+  // Noise lowpass 10000Hz (0.6s, 50%)
   const n1 = createNoiseSource(ctx);
   const f1 = ctx.createBiquadFilter();
   f1.type = 'lowpass';
-  f1.frequency.value = 14000;
+  f1.frequency.value = 10000;
   const g1 = ctx.createGain();
   g1.gain.setValueAtTime(velocity * 0.5, now);
   g1.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
@@ -235,11 +235,11 @@ function playCrash(ctx: AudioContext, velocity: number) {
   n1.start(now);
   n1.stop(now + 0.6);
 
-  // Noise lowpass 8000Hz (0.8s, 30%)
+  // Noise lowpass 6000Hz (0.8s, 30%)
   const n2 = createNoiseSource(ctx);
   const f2 = ctx.createBiquadFilter();
   f2.type = 'lowpass';
-  f2.frequency.value = 8000;
+  f2.frequency.value = 6000;
   const g2 = ctx.createGain();
   g2.gain.setValueAtTime(velocity * 0.3, now);
   g2.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
