@@ -56,26 +56,31 @@
   }
 
   function handleFileImport() {
-    const file = fileInput.files?.[0];
-    if (!file) return;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = JSON.parse(e.target?.result as string);
-        if (Array.isArray(data)) {
-          for (const item of data) {
-            onappend(validatePattern(item));
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target?.result as string);
+          if (Array.isArray(data)) {
+            for (const item of data) {
+              onappend(validatePattern(item));
+            }
+          } else {
+            onload(validatePattern(data));
           }
-        } else {
-          onload(validatePattern(data));
+        } catch {
+          alert('Failed to parse JSON file');
         }
-      } catch (err) {
-        alert('Failed to parse JSON file');
-      }
+      };
+      reader.readAsText(file);
     };
-    reader.readAsText(file);
-    fileInput.value = '';
+    input.click();
   }
 
   function copyToClipboard() {
@@ -98,15 +103,7 @@
 <div class="import-export">
   <div class="section">
     <h3>Import</h3>
-    <input
-      type="file"
-      id="import-file"
-      accept=".json"
-      bind:this={fileInput}
-      onchange={handleFileImport}
-      class="sr-only"
-    />
-    <label for="import-file" class="btn">Import JSON File</label>
+    <button class="btn" onclick={handleFileImport}>Import JSON File</button>
     <button onclick={pasteFromClipboard}>Paste from Clipboard</button>
   </div>
 
@@ -163,18 +160,6 @@
 
   .export-options input[type='radio'] {
     accent-color: var(--accent-pink);
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   .btn {

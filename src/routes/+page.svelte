@@ -16,8 +16,6 @@
 
   let selectedPattern = $derived(patterns.find((p) => p.id === selectedId) ?? patterns[0]);
 
-  let fileInputRef: HTMLInputElement | undefined = $state(undefined);
-
   function updatePattern(updated: DrumPattern) {
     patterns = patterns.map((p) => (p.id === updated.id ? updated : p));
   }
@@ -74,29 +72,34 @@
   }
 
   function handleImportFile() {
-    const file = fileInputRef?.files?.[0];
-    if (!file) return;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = JSON.parse(e.target?.result as string);
-        if (Array.isArray(data)) {
-          for (const item of data) {
-            const validated = validatePattern(item);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target?.result as string);
+          if (Array.isArray(data)) {
+            for (const item of data) {
+              const validated = validatePattern(item);
+              patterns = [...patterns, validated];
+            }
+          } else {
+            const validated = validatePattern(data);
             patterns = [...patterns, validated];
+            selectedId = validated.id;
           }
-        } else {
-          const validated = validatePattern(data);
-          patterns = [...patterns, validated];
-          selectedId = validated.id;
+        } catch {
+          alert('Failed to parse JSON file');
         }
-      } catch {
-        alert('Failed to parse JSON file');
-      }
+      };
+      reader.readAsText(file);
     };
-    reader.readAsText(file);
-    if (fileInputRef) fileInputRef.value = '';
+    input.click();
   }
 
   function handleKeydown(e: KeyboardEvent) {
@@ -117,7 +120,7 @@
       exportCurrentPattern();
     } else if (mod && e.key === 'o') {
       e.preventDefault();
-      fileInputRef?.click();
+      handleImportFile();
     } else if (e.key === 'Delete' || e.key === 'Backspace') {
       e.preventDefault();
       deleteSelectedPattern();
@@ -128,15 +131,6 @@
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
-
-<input
-  type="file"
-  id="global-import-file"
-  accept=".json"
-  bind:this={fileInputRef}
-  onchange={handleImportFile}
-  class="sr-only"
-/>
 
 <svelte:head>
   <title>Funky Drummer Pattern Editor</title>
@@ -283,18 +277,6 @@
 
   .groove-header {
     display: flex;
-  }
-
-  :global(.sr-only) {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   @media (max-width: 768px) {
