@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --background: #0f0a12;
+  --foreground: #f2dce6;
+  --card: #1a1220;
+  --card-foreground: #f2dce6;
+  --primary: #e84a70;
+  --primary-foreground: #0d0a12;
+  --secondary: #1e1628;
+  --secondary-foreground: #f2dce6;
+  --muted: #2a1e32;
+  --muted-foreground: #a08898;
+  --accent: #9060e0;
+  --accent-foreground: #f2dce6;
+  --destructive: #e85050;
+  --destructive-foreground: #f2dce6;
+  --border: #3a2840;
+  --input: #3a2840;
+  --ring: #e84a70;
+  --radius: 18px;
+
+  --bg-deep: #0d0810;
+  --bg-surface: #1a1220;
+  --bg-elevated: #241a30;
+  --bg-hover: #2e2040;
+  --text-primary: #f2dce6;
+  --text-secondary: #a08898;
+  --text-muted: #706078;
+  --accent-pink: #e84a70;
+  --accent-pink-light: #f4829a;
+  --accent-purple: #9060e0;
+  --accent-purple-light: #b890f0;
+  --accent-pink-glow: rgba(232, 74, 112, 0.3);
+  --accent-purple-glow: rgba(144, 96, 224, 0.3);
+  --success: #60d088;
+  --warning: #f0c040;
+  --danger: #e85050;
+  --cyan: #50c8e0;
+
+  --font-retro: 'Press Start 2P', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #svelte {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-purple);
+}
+
+/* ── 3D Pixel-Art Button Base ───────────────────── */
+
+.btn,
+button {
+  background: var(--bg-elevated);
+  border: 3px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: clamp(6px, 0.6vw, 10px) clamp(8px, 1vw, 14px);
+  border-radius: 2px;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-family: inherit;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: none;
+  box-shadow:
+    inset -2px -2px 0 rgba(0, 0, 0, 0.25),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+    3px 3px 0 var(--border);
+}
+
+.btn:hover,
+button:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-purple);
+  color: var(--text-primary);
+  box-shadow:
+    inset -2px -2px 0 rgba(0, 0, 0, 0.25),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.08),
+    3px 3px 0 var(--accent-purple),
+    0 0 8px var(--accent-purple-glow);
+}
+
+.btn:active,
+button:active {
+  box-shadow:
+    inset 2px 2px 0 rgba(0, 0, 0, 0.3),
+    inset -2px -2px 0 rgba(255, 255, 255, 0.05);
+  transform: translate(2px, 2px);
+}
+
+/* ── Section Headings ──────────────────────────── */
+
+h2, h3 {
+  font-family: var(--font-retro);
+}
+
+h2 {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+h3 {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+}
